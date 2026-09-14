@@ -1,0 +1,2 @@
+<template><Transition name="layer-swap" mode="out-in"><div :key="keyValue" class="watch-layer" :class="[`layer-${layer}`,keyValue]"><img v-if="src && layer !== 'dial'" :src="src" alt="" /><span v-if="layer === 'dial'" class="dial-surface" :style="{background: color}" /></div></Transition></template>
+<script setup>defineProps({ layer:String,src:String,color:{type:String,default:'transparent'},keyValue:String })</script>
