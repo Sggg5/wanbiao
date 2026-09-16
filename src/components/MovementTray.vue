@@ -20,7 +20,6 @@
 import { movements } from '../data/watchParts'
 import { useWatchBuilderStore } from '../stores/watchBuilder'
 
-defineProps({ drag: Object })
 const props = defineProps({ drag: Object })
 const store = useWatchBuilderStore()
 
