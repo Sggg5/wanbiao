@@ -7,6 +7,7 @@ import { sanitizeBuild } from '../utils/shareBuild'
 
 const lookup = (type, id) => (partCatalog[type] || []).find((part) => part.id === id)
 const TYPES = ['movement', 'case', 'dial', 'hands', 'strap', 'caseback']
+const DEPENDENT_TYPES = ['case', 'dial', 'hands', 'strap', 'caseback']
 
 export const useWatchBuilderStore = defineStore('watchBuilder', () => {
   const selectedMovement = ref(defaultBuild.movement)
@@ -55,6 +56,26 @@ export const useWatchBuilderStore = defineStore('watchBuilder', () => {
     if (!completedSteps.value.includes(type)) completedSteps.value.push(type)
   }
 
+  function applyBuild(next) {
+    for (const type of TYPES) refsByType[type].value = next[type]
+  }
+
+  function repairDependents(candidate, preserveType = null) {
+    const next = { ...candidate }
+    const repaired = []
+
+    for (const type of DEPENDENT_TYPES) {
+      const part = lookup(type, next[type])
+      if (part && checkCompatibility(part, next).compatible) continue
+      if (type === preserveType) return { valid: false, build: next, repaired }
+      const replacement = getCompatibleParts(type, next)[0]
+      next[type] = replacement?.id || null
+      repaired.push(type)
+    }
+
+    return { valid: getInvalidSelections(next).length === 0, build: next, repaired }
+  }
+
   function setSelection(type, id) {
     if (!TYPES.includes(type)) return { status: 'invalid', reason: 'UNKNOWN_TYPE' }
     if (type === 'movement') return selectMovement(id)
@@ -68,9 +89,12 @@ export const useWatchBuilderStore = defineStore('watchBuilder', () => {
       return { status: 'incompatible', reasons: compatibility.reasons }
     }
 
-    refsByType[type].value = id
+    const repaired = repairDependents(next, type)
+    if (!repaired.valid) return { status: 'incompatible', reasons: ['DEPENDENCY_MISMATCH'] }
+
+    applyBuild(repaired.build)
     markComplete(type)
-    return { status: 'installed', part }
+    return { status: 'installed', part, repaired: repaired.repaired }
   }
 
   function selectMovement(id) {
@@ -92,18 +116,17 @@ export const useWatchBuilderStore = defineStore('watchBuilder', () => {
   function confirmMovement() {
     if (!pendingMovement.value) return { status: 'idle' }
 
-    selectedMovement.value = pendingMovement.value.id
-    const resetTypes = [...pendingMovement.value.invalid]
-
-    for (const type of ['case', 'dial', 'hands', 'strap', 'caseback']) {
-      if (!resetTypes.includes(type)) continue
-      const compatible = getCompatibleParts(type, build.value)[0]
-      refsByType[type].value = compatible?.id || null
+    const candidate = { ...build.value, movement: pendingMovement.value.id }
+    const repaired = repairDependents(candidate)
+    if (!repaired.valid) {
+      pendingMovement.value = null
+      return { status: 'invalid', reason: 'NO_COMPATIBLE_BUILD' }
     }
 
+    applyBuild(repaired.build)
     markComplete('movement')
     pendingMovement.value = null
-    return { status: 'installed', part: lookup('movement', selectedMovement.value) }
+    return { status: 'installed', part: lookup('movement', selectedMovement.value), repaired: repaired.repaired }
   }
 
   function cancelMovement() {
@@ -125,25 +148,14 @@ export const useWatchBuilderStore = defineStore('watchBuilder', () => {
   }
 
   function resetBuild() {
-    selectedMovement.value = defaultBuild.movement
-    selectedCase.value = defaultBuild.case
-    selectedDial.value = defaultBuild.dial
-    selectedHands.value = defaultBuild.hands
-    selectedStrap.value = defaultBuild.strap
-    selectedCaseback.value = defaultBuild.caseback
+    applyBuild(defaultBuild)
     activeStep.value = 'dial'
     completedSteps.value = ['movement', 'case']
     pendingMovement.value = null
   }
 
   function hydrateBuild(next) {
-    const sanitized = sanitizeBuild(next)
-    selectedMovement.value = sanitized.movement
-    selectedCase.value = sanitized.case
-    selectedDial.value = sanitized.dial
-    selectedHands.value = sanitized.hands
-    selectedStrap.value = sanitized.strap
-    selectedCaseback.value = sanitized.caseback
+    applyBuild(sanitizeBuild(next))
     pendingMovement.value = null
   }
 
