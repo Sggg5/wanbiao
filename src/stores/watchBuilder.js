@@ -56,6 +56,11 @@ export const useWatchBuilderStore = defineStore('watchBuilder', () => {
     if (!completedSteps.value.includes(type)) completedSteps.value.push(type)
   }
 
+  function markIncomplete(types = []) {
+    if (!types.length) return
+    completedSteps.value = completedSteps.value.filter((step) => !types.includes(step))
+  }
+
   function applyBuild(next) {
     for (const type of TYPES) refsByType[type].value = next[type]
   }
@@ -94,6 +99,7 @@ export const useWatchBuilderStore = defineStore('watchBuilder', () => {
 
     applyBuild(repaired.build)
     markComplete(type)
+    markIncomplete(repaired.repaired)
     return { status: 'installed', part, repaired: repaired.repaired }
   }
 
@@ -125,6 +131,7 @@ export const useWatchBuilderStore = defineStore('watchBuilder', () => {
 
     applyBuild(repaired.build)
     markComplete('movement')
+    markIncomplete(repaired.repaired)
     pendingMovement.value = null
     return { status: 'installed', part: lookup('movement', selectedMovement.value), repaired: repaired.repaired }
   }
