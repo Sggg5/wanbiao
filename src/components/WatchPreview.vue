@@ -1,19 +1,20 @@
 <template>
   <div ref="stage" class="watch-stage" @pointermove="tilt" @pointerleave="resetTilt">
     <div class="watch-shadow" :style="{ transform: `translate(${pointer.x * 7}px,${pointer.y * 9}px)` }" />
-    <div
-      v-if="drag?.isDragging && compatibleDrag"
-      class="install-ring"
-      :class="{ visible: drag.isOverInstallZone }"
-      :style="zoneStyle"
-    >
-      <span v-if="drag.isOverInstallZone">PLACE TO INSTALL</span>
-    </div>
 
-    <div class="watch-preview" :style="watchStyle">
+    <div ref="previewEl" class="watch-preview" :style="watchStyle">
+      <div
+        v-if="drag?.isDragging && compatibleDrag"
+        class="install-ring"
+        :class="{ visible: drag.isOverInstallZone }"
+        :style="zoneStyle"
+      >
+        <span v-if="drag.isOverInstallZone">PLACE TO INSTALL</span>
+      </div>
+
       <img
         class="watch-image fallback-watch"
-        :class="{ 'composite-ready': hasRealComposite }"
+        :class="{ 'composite-ready': compositeActivated }"
         src="/assets/atelier-watch-placeholder.png"
         alt="Custom steel watch preview"
       />
@@ -56,7 +57,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useWatchBuilderStore } from '../stores/watchBuilder'
 import { partCatalog } from '../data/watchParts'
@@ -66,6 +67,7 @@ import { checkCompatibility } from '../utils/compatibility'
 
 const props = defineProps({ drag: Object })
 const stage = ref(null)
+const previewEl = ref(null)
 const store = useWatchBuilderStore()
 const { build } = storeToRefs(store)
 const part = (type) => computed(() => partCatalog[type].find((item) => item.id === build.value[type]) || null)
@@ -86,6 +88,11 @@ const loadedLayers = reactive({
 
 const requiredCompositeLayers = ['strap-back', 'case', 'dial', 'hands', 'strap-front']
 const hasRealComposite = computed(() => requiredCompositeLayers.every((key) => loadedLayers[key]))
+const compositeActivated = ref(false)
+
+watch(hasRealComposite, (ready) => {
+  if (ready) compositeActivated.value = true
+})
 
 const watchStyle = computed(() => ({
   '--rx': `${-pointer.y * 3}deg`,
@@ -133,20 +140,24 @@ const zoneStyle = computed(() => {
 })
 
 function installTarget(point, draggedPart) {
-  if (!stage.value || !draggedPart) return { accepted: false, reason: 'invalid' }
+  if (!previewEl.value || !draggedPart) return { accepted: false, reason: 'invalid' }
 
   const compatibility = checkCompatibility(draggedPart, build.value)
   if (!compatibility.compatible) {
     return { accepted: false, reason: 'incompatible', reasons: compatibility.reasons }
   }
 
-  const rect = stage.value.getBoundingClientRect()
-  const x = (point.x - rect.left) / rect.width
-  const y = (point.y - rect.top) / rect.height
+  const rect = previewEl.value.getBoundingClientRect()
   const zone = installZones[draggedPart.type]
   if (!zone) return { accepted: false, reason: 'wrong-zone' }
 
-  const inZone = (target) => Math.hypot(x - target.x, y - target.y) <= target.radius
+  const inZone = (target) => {
+    const centerX = rect.left + target.x * rect.width
+    const centerY = rect.top + target.y * rect.height
+    const radius = target.radius * rect.width
+    return Math.hypot(point.x - centerX, point.y - centerY) <= radius
+  }
+
   const accepted = inZone(zone) || Boolean(zone.secondary && inZone(zone.secondary))
   return { accepted, reason: accepted ? null : 'wrong-zone' }
 }
