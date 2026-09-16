@@ -11,6 +11,28 @@ test('default build is fully compatible', () => {
   assert.deepEqual(getInvalidSelections(defaultBuild), [])
 })
 
+test('phase4 9015 golden sample has a complete layered representation', () => {
+  const watchCase = partCatalog.case.find((part) => part.id === defaultBuild.case)
+  const dial = partCatalog.dial.find((part) => part.id === defaultBuild.dial)
+  const hands = partCatalog.hands.find((part) => part.id === defaultBuild.hands)
+  const strap = partCatalog.strap.find((part) => part.id === defaultBuild.strap)
+
+  assert.ok(watchCase.previewLayer || watchCase.sourceLayer)
+  assert.ok(dial.previewLayer || dial.sourceLayer)
+  assert.ok(hands.previewLayer || hands.sourceLayer)
+  assert.ok(strap.backLayer || strap.sourceBackLayer)
+  assert.ok(strap.frontLayer || strap.sourceFrontLayer)
+})
+
+test('all three phase4 dial samples can be paired with Miyota 9015', () => {
+  for (const id of ['dial-midnight-blue', 'dial-obsidian-black', 'dial-silver-grain']) {
+    const dial = partCatalog.dial.find((part) => part.id === id)
+    assert.ok(dial.compatibleMovements.includes('miyota-9015'), `${id} should support Miyota 9015`)
+    const result = checkCompatibility(dial, defaultBuild)
+    assert.equal(result.compatible, true, `${id} should be compatible with the golden build`)
+  }
+})
+
 test('NH35 configuration can be repaired to a valid build while preserving compatible choices', () => {
   const repaired = sanitizeBuild({
     movement: 'seiko-nh35',
