@@ -49,8 +49,8 @@ function readWebPInfo(filePath) {
     const b1 = buffer[22]
     const b2 = buffer[23]
     const b3 = buffer[24]
-    const width = 1 + (((b2 & 0x3f) << 8) | b1)
-    const height = 1 + (((b3 & 0x0f) << 10) | (b2 >> 6) | (b3 & 0xf0) << 2 | b0 * 0)
+    const width = 1 + (((b1 & 0x3f) << 8) | b0)
+    const height = 1 + (((b3 & 0x0f) << 10) | (b2 << 2) | (b1 >> 6))
     return { width, height, alpha: true }
   }
 
