@@ -158,7 +158,8 @@ async function copyLink() {
 
 function onKey(event) {
   if (event.key !== 'Escape') return
-  if (buildSheet.value) buildSheet.value = false
+  if (store.pendingMovement) store.cancelMovement()
+  else if (buildSheet.value) buildSheet.value = false
   else if (completionMode.value) completionMode.value = false
   else if (focusMode.value) focusMode.value = false
 }
