@@ -5,25 +5,25 @@ export const movements = [
 ]
 
 export const cases = [
-  {id:'case-classic-39',type:'case',name:'Classic 39',diameter:39,lugWidth:20,dialDiameter:28.5,price:420,compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,assetKey:'cases/classic-39.webp'},
+  {id:'case-classic-39',type:'case',name:'Classic 39',diameter:39,lugWidth:20,dialDiameter:28.5,price:420,compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,sourceLayer:{kind:'case'},assetKey:'cases/classic-39.webp'},
   {id:'case-slim-38',type:'case',name:'Slim 38',diameter:38,lugWidth:20,dialDiameter:28.5,price:460,compatibleMovements:['sellita-sw200'],previewLayer:null,assetKey:'cases/slim-38.webp'},
   {id:'case-sport-40',type:'case',name:'Sport 40',diameter:40,lugWidth:22,dialDiameter:28.5,price:510,compatibleMovements:['seiko-nh35'],previewLayer:null,assetKey:'cases/sport-40.webp'},
 ]
 
 export const dials = [
-  {id:'dial-midnight-blue',type:'dial',name:'Midnight Blue',sku:'D-001',price:168,diameter:28.5,compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,assetKey:'dials/midnight-blue.webp',color:'#102b46',fallbackTint:null,glow:'#5f91c1'},
-  {id:'dial-obsidian-black',type:'dial',name:'Obsidian Black',sku:'D-002',price:0,diameter:28.5,compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],previewLayer:null,assetKey:'dials/obsidian-black.webp',color:'#111416',fallbackTint:'#111416',glow:'#707576'},
-  {id:'dial-silver-grain',type:'dial',name:'Silver Grain',sku:'D-003',price:120,diameter:28.5,compatibleMovements:['seiko-nh35','sellita-sw200'],previewLayer:null,assetKey:'dials/silver-grain.webp',color:'#bbb6ad',fallbackTint:'#bbb6ad',glow:'#f4eee2'},
+  {id:'dial-midnight-blue',type:'dial',name:'Midnight Blue',sku:'D-001',price:168,diameter:28.5,compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,sourceLayer:{kind:'dial',variant:'blue'},assetKey:'dials/midnight-blue.webp',color:'#102b46',fallbackTint:null,glow:'#5f91c1'},
+  {id:'dial-obsidian-black',type:'dial',name:'Obsidian Black',sku:'D-002',price:0,diameter:28.5,compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],previewLayer:null,sourceLayer:{kind:'dial',variant:'black'},assetKey:'dials/obsidian-black.webp',color:'#111416',fallbackTint:'#111416',glow:'#707576'},
+  {id:'dial-silver-grain',type:'dial',name:'Silver Grain',sku:'D-003',price:120,diameter:28.5,compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],previewLayer:null,sourceLayer:{kind:'dial',variant:'silver'},assetKey:'dials/silver-grain.webp',color:'#bbb6ad',fallbackTint:'#bbb6ad',glow:'#f4eee2'},
 ]
 
 export const hands = [
-  {id:'hands-dauphine',type:'hands',name:'Dauphine',sku:'H-001',price:120,handSize:{hour:1.5,minute:.9,second:.17},compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,assetKey:'hands/dauphine.webp'},
+  {id:'hands-dauphine',type:'hands',name:'Dauphine',sku:'H-001',price:120,handSize:{hour:1.5,minute:.9,second:.17},compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,sourceLayer:{kind:'hands'},assetKey:'hands/dauphine.webp'},
   {id:'hands-baton',type:'hands',name:'Baton',sku:'H-002',price:80,handSizes:[{hour:1.5,minute:.9,second:.17},{hour:1.5,minute:.9,second:.2}],compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],previewLayer:null,assetKey:'hands/baton.webp'},
   {id:'hands-leaf',type:'hands',name:'Leaf',sku:'H-003',price:145,handSize:{hour:1.5,minute:.9,second:.2},compatibleMovements:['seiko-nh35'],previewLayer:null,assetKey:'hands/leaf.webp'},
 ]
 
 export const straps = [
-  {id:'strap-steel',type:'strap',name:'Steel Bracelet',sku:'S-001',price:590,lugWidths:[20,22],compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],backLayer:null,frontLayer:null,assetKey:'straps/steel',material:'steel'},
+  {id:'strap-steel',type:'strap',name:'Steel Bracelet',sku:'S-001',price:590,lugWidths:[20,22],compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],backLayer:null,frontLayer:null,sourceBackLayer:{kind:'strap-back'},sourceFrontLayer:{kind:'strap-front'},assetKey:'straps/steel',material:'steel'},
   {id:'strap-black-leather',type:'strap',name:'Black Leather',sku:'S-002',price:260,lugWidths:[20],compatibleMovements:['miyota-9015','sellita-sw200'],backLayer:null,frontLayer:null,assetKey:'straps/black-leather',material:'black-leather'},
   {id:'strap-brown-leather',type:'strap',name:'Brown Leather',sku:'S-003',price:240,lugWidths:[20,22],compatibleMovements:['seiko-nh35','sellita-sw200'],backLayer:null,frontLayer:null,assetKey:'straps/brown-leather',material:'brown-leather'},
 ]

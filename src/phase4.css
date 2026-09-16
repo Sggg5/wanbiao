@@ -1,0 +1,42 @@
+/* Phase 4 layer-composite behavior. Keep the Phase 3 visual fallback intact unless a full layer set is ready. */
+
+.source-derived-layer,
+.watch-layer img {
+  transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
+}
+
+.watch-preview:not(.composite-active) .source-derived-layer,
+.watch-preview:not(.composite-active) .watch-layer img {
+  opacity: 0;
+}
+
+.watch-preview.composite-active .source-derived-layer,
+.watch-preview.composite-active .watch-layer img {
+  opacity: 1;
+}
+
+.watch-preview.composite-active .dial-surface {
+  display: none;
+}
+
+.watch-preview:not(.composite-active) .layer-case.has-image::after,
+.watch-preview:not(.composite-active) .layer-hands.has-image::after,
+.watch-preview:not(.composite-active) .layer-strap-front.has-image::after,
+.watch-preview:not(.composite-active) .layer-strap-back.has-image::after {
+  display: block;
+}
+
+.watch-preview.composite-active .crystal-highlight {
+  opacity: .24;
+}
+
+.watch-preview.composite-active .watch-shadow {
+  opacity: .48;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .source-derived-layer,
+  .watch-layer img {
+    transition: none;
+  }
+}

@@ -2,7 +2,12 @@
   <div ref="stage" class="watch-stage" @pointermove="tilt" @pointerleave="resetTilt">
     <div class="watch-shadow" :style="{ transform: `translate(${pointer.x * 7}px,${pointer.y * 9}px)` }" />
 
-    <div ref="previewEl" class="watch-preview" :style="watchStyle">
+    <div
+      ref="previewEl"
+      class="watch-preview"
+      :class="{ 'composite-active': compositeActivated }"
+      :style="watchStyle"
+    >
       <div
         v-for="(style, index) in zoneStyles"
         v-if="drag?.isDragging && compatibleDrag"
@@ -21,19 +26,55 @@
         alt="Custom steel watch preview"
       />
 
-      <WatchLayer layer="strap-back" :src="strap?.backLayer" :key-value="strap?.id" @loaded="setLayerLoaded('strap-back', $event)" />
-      <WatchLayer layer="case" :src="watchCase?.previewLayer" :key-value="watchCase?.id" @loaded="setLayerLoaded('case', $event)" />
-      <WatchLayer layer="dial" :src="dial?.previewLayer" :color="dial?.fallbackTint || 'transparent'" :key-value="dial?.id" @loaded="setLayerLoaded('dial', $event)" />
-      <WatchLayer layer="hands" :src="watchHands?.previewLayer" :key-value="watchHands?.id" @loaded="setLayerLoaded('hands', $event)" />
-      <WatchLayer layer="crystal" key-value="crystal" @loaded="setLayerLoaded('crystal', $event)" />
-      <WatchLayer layer="strap-front" :src="strap?.frontLayer" :key-value="strap?.id" @loaded="setLayerLoaded('strap-front', $event)" />
+      <WatchLayer
+        layer="strap-back"
+        :src="strap?.backLayer"
+        :source-layer="strap?.sourceBackLayer"
+        :key-value="strap?.id"
+        @loaded="setLayerLoaded('strap-back', $event)"
+      />
+      <WatchLayer
+        layer="case"
+        :src="watchCase?.previewLayer"
+        :source-layer="watchCase?.sourceLayer"
+        :key-value="watchCase?.id"
+        @loaded="setLayerLoaded('case', $event)"
+      />
+      <WatchLayer
+        layer="dial"
+        :src="dial?.previewLayer"
+        :source-layer="dial?.sourceLayer"
+        :color="dial?.fallbackTint || 'transparent'"
+        :key-value="dial?.id"
+        @loaded="setLayerLoaded('dial', $event)"
+      />
+      <WatchLayer
+        layer="hands"
+        :src="watchHands?.previewLayer"
+        :source-layer="watchHands?.sourceLayer"
+        :key-value="watchHands?.id"
+        @loaded="setLayerLoaded('hands', $event)"
+      />
+      <WatchLayer
+        layer="crystal"
+        :source-layer="{ kind: 'crystal' }"
+        key-value="crystal"
+        @loaded="setLayerLoaded('crystal', $event)"
+      />
+      <WatchLayer
+        layer="strap-front"
+        :src="strap?.frontLayer"
+        :source-layer="strap?.sourceFrontLayer"
+        :key-value="strap?.id"
+        @loaded="setLayerLoaded('strap-front', $event)"
+      />
       <div class="crystal-highlight" :style="{ transform: `translate(${pointer.x * 16}px,${pointer.y * 14}px)` }" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useWatchBuilderStore } from '../stores/watchBuilder'
 import { partCatalog } from '../data/watchParts'
@@ -55,9 +96,7 @@ const strap = part('strap')
 const pointer = reactive({ x: 0, y: 0 })
 const loadedLayers = reactive({ 'strap-back': false, case: false, dial: false, hands: false, crystal: false, 'strap-front': false })
 const requiredCompositeLayers = ['strap-back', 'case', 'dial', 'hands', 'strap-front']
-const hasRealComposite = computed(() => requiredCompositeLayers.every((key) => loadedLayers[key]))
-const compositeActivated = ref(false)
-watch(hasRealComposite, (ready) => { if (ready) compositeActivated.value = true })
+const compositeActivated = computed(() => requiredCompositeLayers.every((key) => loadedLayers[key]))
 
 const watchStyle = computed(() => ({ '--rx': `${-pointer.y * 3}deg`, '--ry': `${pointer.x * 5}deg` }))
 const reducedMotionQuery = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null

@@ -5,15 +5,19 @@
       class="watch-layer"
       :class="[`layer-${layer}`, keyValue, { 'has-image': loaded }]"
     >
+      <SourceDerivedLayer
+        v-if="sourceLayer && !src"
+        :spec="sourceLayer"
+      />
       <img
-        v-if="src && !failed"
+        v-else-if="src && !failed"
         :src="src"
         alt=""
         @load="handleLoad"
         @error="handleError"
       />
       <span
-        v-if="layer === 'dial' && !loaded"
+        v-if="layer === 'dial' && color !== 'transparent'"
         class="dial-surface"
         :style="{ '--dial': color }"
       />
@@ -23,10 +27,12 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import SourceDerivedLayer from './SourceDerivedLayer.vue'
 
 const props = defineProps({
   layer: String,
   src: String,
+  sourceLayer: Object,
   color: { type: String, default: 'transparent' },
   keyValue: String,
 })
@@ -36,9 +42,9 @@ const loaded = ref(false)
 const failed = ref(false)
 
 function reset() {
-  loaded.value = false
   failed.value = false
-  emit('loaded', false)
+  loaded.value = Boolean(props.sourceLayer && !props.src)
+  emit('loaded', loaded.value)
 }
 
 function handleLoad() {
@@ -53,5 +59,9 @@ function handleError() {
   emit('loaded', false)
 }
 
-watch(() => [props.src, props.keyValue], reset)
+watch(
+  () => [props.src, props.keyValue, props.sourceLayer?.kind, props.sourceLayer?.variant],
+  reset,
+  { immediate: true },
+)
 </script>
