@@ -21,38 +21,12 @@
         alt="Custom steel watch preview"
       />
 
-      <WatchLayer
-        layer="strap-back"
-        :src="strap?.backLayer"
-        :key-value="strap?.id"
-        @loaded="setLayerLoaded('strap-back', $event)"
-      />
-      <WatchLayer
-        layer="case"
-        :src="watchCase?.previewLayer"
-        :key-value="watchCase?.id"
-        @loaded="setLayerLoaded('case', $event)"
-      />
-      <WatchLayer
-        layer="dial"
-        :src="dial?.previewLayer"
-        :color="dial?.color"
-        :key-value="dial?.id"
-        @loaded="setLayerLoaded('dial', $event)"
-      />
-      <WatchLayer
-        layer="hands"
-        :src="watchHands?.previewLayer"
-        :key-value="watchHands?.id"
-        @loaded="setLayerLoaded('hands', $event)"
-      />
+      <WatchLayer layer="strap-back" :src="strap?.backLayer" :key-value="strap?.id" @loaded="setLayerLoaded('strap-back', $event)" />
+      <WatchLayer layer="case" :src="watchCase?.previewLayer" :key-value="watchCase?.id" @loaded="setLayerLoaded('case', $event)" />
+      <WatchLayer layer="dial" :src="dial?.previewLayer" :color="dial?.fallbackTint || 'transparent'" :key-value="dial?.id" @loaded="setLayerLoaded('dial', $event)" />
+      <WatchLayer layer="hands" :src="watchHands?.previewLayer" :key-value="watchHands?.id" @loaded="setLayerLoaded('hands', $event)" />
       <WatchLayer layer="crystal" key-value="crystal" @loaded="setLayerLoaded('crystal', $event)" />
-      <WatchLayer
-        layer="strap-front"
-        :src="strap?.frontLayer"
-        :key-value="strap?.id"
-        @loaded="setLayerLoaded('strap-front', $event)"
-      />
+      <WatchLayer layer="strap-front" :src="strap?.frontLayer" :key-value="strap?.id" @loaded="setLayerLoaded('strap-front', $event)" />
       <div class="crystal-highlight" :style="{ transform: `translate(${pointer.x * 16}px,${pointer.y * 14}px)` }" />
     </div>
   </div>
@@ -79,89 +53,51 @@ const watchHands = part('hands')
 const strap = part('strap')
 
 const pointer = reactive({ x: 0, y: 0 })
-const loadedLayers = reactive({
-  'strap-back': false,
-  case: false,
-  dial: false,
-  hands: false,
-  crystal: false,
-  'strap-front': false,
-})
-
+const loadedLayers = reactive({ 'strap-back': false, case: false, dial: false, hands: false, crystal: false, 'strap-front': false })
 const requiredCompositeLayers = ['strap-back', 'case', 'dial', 'hands', 'strap-front']
 const hasRealComposite = computed(() => requiredCompositeLayers.every((key) => loadedLayers[key]))
 const compositeActivated = ref(false)
+watch(hasRealComposite, (ready) => { if (ready) compositeActivated.value = true })
 
-watch(hasRealComposite, (ready) => {
-  if (ready) compositeActivated.value = true
-})
-
-const watchStyle = computed(() => ({
-  '--rx': `${-pointer.y * 3}deg`,
-  '--ry': `${pointer.x * 5}deg`,
-}))
-
+const watchStyle = computed(() => ({ '--rx': `${-pointer.y * 3}deg`, '--ry': `${pointer.x * 5}deg` }))
 const reducedMotionQuery = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null
 let tiltFrame = 0
 
-function setLayerLoaded(layer, loaded) {
-  loadedLayers[layer] = loaded
-}
-
+function setLayerLoaded(layer, loaded) { loadedLayers[layer] = loaded }
 function tilt(event) {
   if (reducedMotionQuery?.matches) return
   const rect = event.currentTarget.getBoundingClientRect()
   const nextX = (event.clientX - rect.left) / rect.width * 2 - 1
   const nextY = (event.clientY - rect.top) / rect.height * 2 - 1
   cancelAnimationFrame(tiltFrame)
-  tiltFrame = requestAnimationFrame(() => {
-    pointer.x = nextX
-    pointer.y = nextY
-  })
+  tiltFrame = requestAnimationFrame(() => { pointer.x = nextX; pointer.y = nextY })
 }
-
-function resetTilt() {
-  cancelAnimationFrame(tiltFrame)
-  pointer.x = 0
-  pointer.y = 0
-}
+function resetTilt() { cancelAnimationFrame(tiltFrame); pointer.x = 0; pointer.y = 0 }
 
 const compatibleDrag = computed(() => {
   const draggedPart = props.drag?.dragPart
   return Boolean(draggedPart && checkCompatibility(draggedPart, build.value).compatible)
 })
-
 const zoneStyles = computed(() => {
   const zone = installZones[props.drag?.dragPart?.type] || installZones.case
-  return [zone, zone.secondary]
-    .filter(Boolean)
-    .map((target) => ({
-      left: `${target.x * 100}%`,
-      top: `${target.y * 100}%`,
-      width: `${target.radius * 200}%`,
-      aspectRatio: '1',
-    }))
+  return [zone, zone.secondary].filter(Boolean).map((target) => ({
+    left: `${target.x * 100}%`, top: `${target.y * 100}%`, width: `${target.radius * 200}%`, aspectRatio: '1',
+  }))
 })
 
 function installTarget(point, draggedPart) {
   if (!previewEl.value || !draggedPart) return { accepted: false, reason: 'invalid' }
-
   const compatibility = checkCompatibility(draggedPart, build.value)
-  if (!compatibility.compatible) {
-    return { accepted: false, reason: 'incompatible', reasons: compatibility.reasons }
-  }
-
+  if (!compatibility.compatible) return { accepted: false, reason: 'incompatible', reasons: compatibility.reasons }
   const rect = previewEl.value.getBoundingClientRect()
   const zone = installZones[draggedPart.type]
   if (!zone) return { accepted: false, reason: 'wrong-zone' }
-
   const inZone = (target) => {
     const centerX = rect.left + target.x * rect.width
     const centerY = rect.top + target.y * rect.height
     const radius = target.radius * rect.width
     return Math.hypot(point.x - centerX, point.y - centerY) <= radius
   }
-
   const accepted = inZone(zone) || Boolean(zone.secondary && inZone(zone.secondary))
   return { accepted, reason: accepted ? null : 'wrong-zone' }
 }
