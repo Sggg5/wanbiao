@@ -2,7 +2,7 @@
   <main class="workbench" :class="{ 'focus-mode': focusMode, 'completion-mode': completionMode }">
     <div class="wood-grain" aria-hidden="true" />
 
-    <header class="workbench-header" :inert="focusMode ? '' : undefined">
+    <header class="workbench-header" :inert="benchControlsLocked ? '' : undefined">
       <a href="#" class="brand">ATELIER <i>TIME</i></a>
       <div>
         <button class="build-number" @click="buildSheet = true">BUILD / {{ store.buildNumber }}</button>
@@ -11,11 +11,11 @@
     </header>
 
     <section class="bench-content">
-      <MovementTray :drag="activeDrag" :inert="focusMode || completionMode ? '' : undefined" />
+      <MovementTray :drag="activeDrag" :inert="benchControlsLocked ? '' : undefined" />
       <section class="leather-mat" aria-label="Watch assembly mat" @click="enterFocus">
         <WatchPreview ref="preview" :drag="activeDrag" />
       </section>
-      <PartsTray :drag="activeDrag" :inert="focusMode || completionMode ? '' : undefined" />
+      <PartsTray :drag="activeDrag" :inert="benchControlsLocked ? '' : undefined" />
     </section>
 
     <CompatibilityConfirm />
@@ -23,7 +23,7 @@
     <WorkbenchTool kind="screwdriver" />
     <WorkbenchTool kind="cloth" />
 
-    <footer class="workbench-footer" :inert="focusMode || completionMode ? '' : undefined">
+    <footer class="workbench-footer" :inert="benchControlsLocked ? '' : undefined">
       <AssemblySteps />
       <div class="build-price">
         <span>¥ {{ store.totalPrice.toLocaleString() }}</span>
@@ -84,6 +84,12 @@ const focusMode = ref(false)
 const buildSheet = ref(false)
 const completionMode = ref(false)
 const notice = ref('')
+const benchControlsLocked = computed(() => (
+  focusMode.value
+  || completionMode.value
+  || buildSheet.value
+  || Boolean(store.pendingMovement)
+))
 let timer
 
 function announce(message) {
@@ -123,7 +129,7 @@ const demoDrag = {
 const activeDrag = computed(() => screenshotDrag.value ? demoDrag : drag)
 
 function enterFocus(event) {
-  if (completionMode.value || buildSheet.value || drag.isDragging) return
+  if (completionMode.value || buildSheet.value || store.pendingMovement || drag.isDragging) return
   if (!event.target.closest('.watch-preview')) focusMode.value = true
 }
 
