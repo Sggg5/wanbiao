@@ -43,12 +43,7 @@
         :key-value="watchHands?.id"
         @loaded="setLayerLoaded('hands', $event)"
       />
-      <WatchLayer
-        layer="crystal"
-        src="/assets/parts/common/crystal-highlight.webp"
-        key-value="crystal"
-        @loaded="setLayerLoaded('crystal', $event)"
-      />
+      <WatchLayer layer="crystal" key-value="crystal" @loaded="setLayerLoaded('crystal', $event)" />
       <WatchLayer
         layer="strap-front"
         :src="strap?.frontLayer"
@@ -123,8 +118,8 @@ function resetTilt() {
 }
 
 const compatibleDrag = computed(() => {
-  const part = props.drag?.dragPart
-  return Boolean(part && checkCompatibility(part, build.value).compatible)
+  const draggedPart = props.drag?.dragPart
+  return Boolean(draggedPart && checkCompatibility(draggedPart, build.value).compatible)
 })
 
 const zoneStyle = computed(() => {
@@ -137,10 +132,10 @@ const zoneStyle = computed(() => {
   }
 })
 
-function installTarget(point, part) {
-  if (!stage.value || !part) return { accepted: false, reason: 'invalid' }
+function installTarget(point, draggedPart) {
+  if (!stage.value || !draggedPart) return { accepted: false, reason: 'invalid' }
 
-  const compatibility = checkCompatibility(part, build.value)
+  const compatibility = checkCompatibility(draggedPart, build.value)
   if (!compatibility.compatible) {
     return { accepted: false, reason: 'incompatible', reasons: compatibility.reasons }
   }
@@ -148,7 +143,7 @@ function installTarget(point, part) {
   const rect = stage.value.getBoundingClientRect()
   const x = (point.x - rect.left) / rect.width
   const y = (point.y - rect.top) / rect.height
-  const zone = installZones[part.type]
+  const zone = installZones[draggedPart.type]
   if (!zone) return { accepted: false, reason: 'wrong-zone' }
 
   const inZone = (target) => Math.hypot(x - target.x, y - target.y) <= target.radius
