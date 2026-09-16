@@ -62,7 +62,6 @@
   border-radius: 50%;
   background: var(--dial);
   mix-blend-mode: color;
-  opacity: .45;
 }
 
 .layer-case.has-image::after,
@@ -101,6 +100,242 @@ a:focus-visible {
   margin: 0;
   text-align: right;
   font: 12px/1.4 Georgia, serif;
+}
+
+/* Material and hierarchy polish: the bench should feel physical first, UI second. */
+.workbench {
+  background:
+    radial-gradient(ellipse at 49% 45%, rgba(215, 180, 136, .085), transparent 31%),
+    linear-gradient(118deg, rgba(10, 6, 4, .49), rgba(18, 10, 7, .16) 38%, rgba(10, 6, 4, .38)),
+    url('/assets/walnut-workbench-texture.png') center / cover;
+}
+
+.workbench::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 47%, transparent 0 28%, rgba(7, 4, 3, .08) 56%, rgba(7, 4, 3, .30) 100%),
+    linear-gradient(90deg, rgba(9, 5, 3, .20), transparent 26% 73%, rgba(9, 5, 3, .18));
+}
+
+.wood-grain {
+  opacity: .56;
+  mix-blend-mode: soft-light;
+  background:
+    radial-gradient(ellipse at 80% 8%, rgba(238, 203, 164, .075), transparent 27%),
+    linear-gradient(134deg, rgba(9, 5, 3, .26), transparent 46%, rgba(6, 3, 2, .29));
+}
+
+.workbench::after {
+  box-shadow: inset 0 0 190px rgba(7, 4, 3, .78);
+}
+
+.brand {
+  color: rgba(238, 228, 214, .90);
+  letter-spacing: .115em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .32);
+}
+
+.brand i {
+  color: rgba(194, 151, 111, .84);
+}
+
+.workbench-header > div {
+  color: rgba(234, 225, 214, .48);
+}
+
+.build-number {
+  opacity: .62;
+}
+
+.menu {
+  opacity: .38;
+}
+
+.leather-mat {
+  background:
+    radial-gradient(ellipse at 58% 12%, rgba(143, 137, 125, .075), transparent 28%),
+    linear-gradient(145deg, rgba(255,255,255,.018), transparent 34%, rgba(0,0,0,.09)),
+    repeating-linear-gradient(101deg, rgba(255,255,255,.012) 0 1px, transparent 1px 4px),
+    #1b1b1a;
+  border: 1px solid rgba(14, 14, 13, .86);
+  box-shadow:
+    19px 27px 42px rgba(8, 5, 3, .50),
+    -3px -3px 10px rgba(193, 161, 123, .035),
+    inset 0 1px rgba(255,255,255,.025),
+    inset 0 0 62px rgba(0,0,0,.32);
+}
+
+.leather-mat::after {
+  inset: 8px;
+  border-color: rgba(197, 184, 165, .105);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35);
+}
+
+.watch-image {
+  filter:
+    drop-shadow(10px 17px 12px rgba(0,0,0,.56))
+    contrast(1.045)
+    saturate(.90);
+}
+
+.watch-shadow {
+  opacity: .56;
+  filter: blur(20px);
+}
+
+.crystal-highlight {
+  opacity: .58;
+}
+
+.movement-tray {
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, rgba(0,0,0,.02) 1px 3px),
+    linear-gradient(101deg, #252725 0%, #686861 9%, #353735 22%, #6a6861 58%, #2a2c2a 100%);
+  border-color: rgba(198, 197, 186, .29);
+  box-shadow:
+    11px 18px 25px rgba(10, 6, 4, .48),
+    inset 1px 1px rgba(255,255,255,.12),
+    inset -3px -4px 9px rgba(0,0,0,.48);
+}
+
+.movement-tray::before {
+  inset: 7px;
+  border-color: rgba(15, 15, 14, .72);
+  box-shadow:
+    inset 0 0 0 1px rgba(221, 215, 197, .08),
+    inset 0 12px 24px rgba(255,255,255,.018);
+}
+
+.movement {
+  opacity: .63;
+}
+
+.movement:hover,
+.movement.selected {
+  opacity: 1;
+  transform: translateY(-4px) scale(1.035);
+}
+
+.movement-disc {
+  box-shadow:
+    4px 8px 8px rgba(0,0,0,.52),
+    -1px -1px 3px rgba(255,255,255,.11);
+}
+
+.movement strong {
+  color: rgba(238, 228, 211, .86);
+  letter-spacing: .10em;
+}
+
+.movement small {
+  color: rgba(225, 212, 194, .62);
+}
+
+.dial-part {
+  opacity: .74;
+}
+
+.dial-part:hover,
+.dial-part.selected {
+  opacity: 1;
+  transform: translateY(-4px) rotate(1deg) scale(1.035);
+}
+
+.dial-disc {
+  box-shadow:
+    9px 15px 17px rgba(0,0,0,.50),
+    -1px -1px 3px rgba(255,230,199,.11);
+}
+
+.part-meta {
+  top: 109%;
+}
+
+.part-meta b {
+  color: rgba(238, 228, 211, .83);
+  font-size: 9px;
+  letter-spacing: .11em;
+  font-weight: 500;
+}
+
+.part-meta small {
+  color: rgba(206, 183, 154, .68);
+  letter-spacing: .08em;
+}
+
+.dial-part.selected .part-meta {
+  opacity: .78;
+}
+
+.assembly-steps {
+  gap: clamp(20px, 2.4vw, 42px);
+}
+
+.assembly-steps button {
+  color: rgba(229, 216, 198, .30);
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .13em;
+}
+
+.assembly-steps i {
+  margin-bottom: 5px;
+  font-size: 10px;
+}
+
+.assembly-steps .complete {
+  color: rgba(229, 216, 198, .52);
+}
+
+.assembly-steps .active {
+  color: rgba(242, 221, 192, .86);
+}
+
+.assembly-steps .active i {
+  color: rgba(214, 154, 103, .88);
+}
+
+.build-price {
+  gap: 22px;
+}
+
+.build-price > span {
+  color: rgba(242, 232, 217, .91);
+  font-size: 24px;
+  letter-spacing: .015em;
+}
+
+.build-price button {
+  color: rgba(236, 225, 208, .72);
+  border-bottom-color: rgba(227, 205, 177, .34);
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+
+.build-price button:hover {
+  color: rgba(248, 226, 199, .96);
+  border-color: rgba(248, 226, 199, .70);
+}
+
+.workbench-tool {
+  opacity: .18;
+}
+
+.loupe {
+  opacity: .72;
+}
+
+.screwdriver {
+  opacity: .50;
+}
+
+.cloth {
+  opacity: .42;
 }
 
 @media (prefers-reduced-motion: reduce) {
