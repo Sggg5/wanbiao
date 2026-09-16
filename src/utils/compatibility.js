@@ -52,7 +52,7 @@ export function getCompatibleParts(type, build) {
 export function getInvalidSelections(build) {
   return ['case', 'dial', 'hands', 'strap', 'caseback'].filter((type) => {
     const id = build[type]
-    if (!id) return false
+    if (!id) return true
     const part = findPart(type, id)
     return !part || !isCompatible(part, build)
   })
