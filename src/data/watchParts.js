@@ -11,9 +11,9 @@ export const cases = [
 ]
 
 export const dials = [
-  {id:'dial-midnight-blue',type:'dial',name:'Midnight Blue',sku:'D-001',price:168,diameter:28.5,compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,assetKey:'dials/midnight-blue.webp',color:'#102b46',glow:'#5f91c1'},
-  {id:'dial-obsidian-black',type:'dial',name:'Obsidian Black',sku:'D-002',price:0,diameter:28.5,compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],previewLayer:null,assetKey:'dials/obsidian-black.webp',color:'#111416',glow:'#707576'},
-  {id:'dial-silver-grain',type:'dial',name:'Silver Grain',sku:'D-003',price:120,diameter:28.5,compatibleMovements:['seiko-nh35','sellita-sw200'],previewLayer:null,assetKey:'dials/silver-grain.webp',color:'#bbb6ad',glow:'#f4eee2'},
+  {id:'dial-midnight-blue',type:'dial',name:'Midnight Blue',sku:'D-001',price:168,diameter:28.5,compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:null,assetKey:'dials/midnight-blue.webp',color:'#102b46',fallbackTint:null,glow:'#5f91c1'},
+  {id:'dial-obsidian-black',type:'dial',name:'Obsidian Black',sku:'D-002',price:0,diameter:28.5,compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],previewLayer:null,assetKey:'dials/obsidian-black.webp',color:'#111416',fallbackTint:'#111416',glow:'#707576'},
+  {id:'dial-silver-grain',type:'dial',name:'Silver Grain',sku:'D-003',price:120,diameter:28.5,compatibleMovements:['seiko-nh35','sellita-sw200'],previewLayer:null,assetKey:'dials/silver-grain.webp',color:'#bbb6ad',fallbackTint:'#bbb6ad',glow:'#f4eee2'},
 ]
 
 export const hands = [
