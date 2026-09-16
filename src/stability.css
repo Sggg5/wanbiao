@@ -53,10 +53,10 @@
 
 .dial-surface {
   position: absolute;
-  width: 25%;
+  width: 55%;
   aspect-ratio: 1;
-  top: 37%;
-  left: 37.5%;
+  top: 27%;
+  left: 22.5%;
   right: auto;
   bottom: auto;
   border-radius: 50%;
