@@ -23,8 +23,11 @@ export function checkCompatibility(part, build) {
     if (Math.abs(watchCase.dialDiameter - part.diameter) > 0.05) reasons.push('DIAL_DIAMETER_MISMATCH')
   }
 
-  if (part.type === 'hands' && movement?.handSize && part.handSize) {
-    if (!sameHandSize(movement.handSize, part.handSize)) reasons.push('HAND_SIZE_MISMATCH')
+  if (part.type === 'hands' && movement?.handSize) {
+    const supported = part.handSizes || (part.handSize ? [part.handSize] : [])
+    if (supported.length && !supported.some((size) => sameHandSize(movement.handSize, size))) {
+      reasons.push('HAND_SIZE_MISMATCH')
+    }
   }
 
   if (part.type === 'strap' && watchCase?.lugWidth && part.lugWidths) {
