@@ -4,12 +4,14 @@
 
     <div ref="previewEl" class="watch-preview" :style="watchStyle">
       <div
+        v-for="(style, index) in zoneStyles"
         v-if="drag?.isDragging && compatibleDrag"
+        :key="index"
         class="install-ring"
         :class="{ visible: drag.isOverInstallZone }"
-        :style="zoneStyle"
+        :style="style"
       >
-        <span v-if="drag.isOverInstallZone">PLACE TO INSTALL</span>
+        <span v-if="drag.isOverInstallZone && zoneStyles.length === 1">PLACE TO INSTALL</span>
       </div>
 
       <img
@@ -129,14 +131,16 @@ const compatibleDrag = computed(() => {
   return Boolean(draggedPart && checkCompatibility(draggedPart, build.value).compatible)
 })
 
-const zoneStyle = computed(() => {
+const zoneStyles = computed(() => {
   const zone = installZones[props.drag?.dragPart?.type] || installZones.case
-  return {
-    left: `${zone.x * 100}%`,
-    top: `${zone.y * 100}%`,
-    width: `${zone.radius * 200}%`,
-    aspectRatio: '1',
-  }
+  return [zone, zone.secondary]
+    .filter(Boolean)
+    .map((target) => ({
+      left: `${target.x * 100}%`,
+      top: `${target.y * 100}%`,
+      width: `${target.radius * 200}%`,
+      aspectRatio: '1',
+    }))
 })
 
 function installTarget(point, draggedPart) {
