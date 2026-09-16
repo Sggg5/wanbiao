@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, proxyRefs, ref } from 'vue'
 
 const normalizeTarget = (result) => {
   if (typeof result === 'boolean') return { accepted: result, reason: result ? null : 'wrong-zone' }
@@ -105,7 +105,7 @@ export function usePartDrag({ getInstallTarget, onInstall, onInvalid }) {
 
   onBeforeUnmount(cleanup)
 
-  return {
+  return proxyRefs({
     isDragging,
     dragPart,
     dragPosition,
@@ -115,5 +115,5 @@ export function usePartDrag({ getInstallTarget, onInstall, onInvalid }) {
     begin,
     cancel,
     consumeClick,
-  }
+  })
 }
