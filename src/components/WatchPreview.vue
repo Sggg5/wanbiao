@@ -57,7 +57,7 @@
       />
       <WatchLayer
         layer="crystal"
-        :source-layer="{ kind: 'crystal' }"
+        src="/assets/parts/common/crystal-highlight.webp"
         key-value="crystal"
         @loaded="setLayerLoaded('crystal', $event)"
       />

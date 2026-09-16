@@ -6,6 +6,7 @@ import { defaultBuild, partCatalog } from '../src/data/watchParts.js'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const strictWebp = process.argv.includes('--strict-webp')
 const expectedCanvas = { width: 1200, height: 1600 }
+const crystalLayer = '/assets/parts/common/crystal-highlight.webp'
 const allowedDerivedKinds = new Set(['case', 'dial', 'hands', 'strap-back', 'strap-front', 'crystal'])
 const errors = []
 const warnings = []
@@ -76,9 +77,7 @@ function validateStandaloneAsset(owner, webPath) {
     if (info.width !== expectedCanvas.width || info.height !== expectedCanvas.height) {
       fail(`${owner}: expected ${expectedCanvas.width}x${expectedCanvas.height}, got ${info.width}x${info.height} (${webPath})`)
     }
-    if (!info.alpha) {
-      fail(`${owner}: layer requires transparency (${webPath})`)
-    }
+    if (!info.alpha) fail(`${owner}: layer requires transparency (${webPath})`)
   } catch (error) {
     fail(`${owner}: ${error.message} (${webPath})`)
   }
@@ -88,12 +87,8 @@ function validateStandaloneAsset(owner, webPath) {
 function validateDerived(owner, spec) {
   if (!spec) return false
   derivedAssets += 1
-  if (!allowedDerivedKinds.has(spec.kind)) {
-    fail(`${owner}: unknown source-derived kind ${spec.kind}`)
-  }
-  if (strictWebp) {
-    fail(`${owner}: still uses source-derived prototype instead of standalone 1200x1600 WebP`)
-  }
+  if (!allowedDerivedKinds.has(spec.kind)) fail(`${owner}: unknown source-derived kind ${spec.kind}`)
+  if (strictWebp) fail(`${owner}: still uses source-derived prototype instead of standalone 1200x1600 WebP`)
   return true
 }
 
@@ -120,6 +115,7 @@ function validatePart(part) {
 for (const parts of Object.values(partCatalog)) {
   for (const part of parts) validatePart(part)
 }
+validateStandaloneAsset('common.crystal-highlight', crystalLayer)
 
 function getPart(type, id) {
   return partCatalog[type]?.find((part) => part.id === id)
