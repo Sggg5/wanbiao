@@ -18,8 +18,7 @@ export const dials = [
 
 export const hands = [
   {id:'hands-dauphine',type:'hands',name:'Dauphine',sku:'H-001',price:120,handSize:{hour:1.5,minute:.9,second:.17},compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:'/assets/parts/hands/dauphine.webp'},
-  {id:'hands-baton',type:'hands',name:'Baton',sku:'H-002',price:80,handSize:{hour:1.5,minute:.9,second:.17},compatibleMovements:['miyota-9015','sellita-sw200'],previewLayer:'/assets/parts/hands/baton.webp'},
-  {id:'hands-baton-nh35',type:'hands',name:'Baton NH35',sku:'H-002N',price:80,handSize:{hour:1.5,minute:.9,second:.2},compatibleMovements:['seiko-nh35'],previewLayer:'/assets/parts/hands/baton-nh35.webp'},
+  {id:'hands-baton',type:'hands',name:'Baton',sku:'H-002',price:80,handSizes:[{hour:1.5,minute:.9,second:.17},{hour:1.5,minute:.9,second:.2}],compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],previewLayer:'/assets/parts/hands/baton.webp'},
   {id:'hands-leaf',type:'hands',name:'Leaf',sku:'H-003',price:145,handSize:{hour:1.5,minute:.9,second:.2},compatibleMovements:['seiko-nh35'],previewLayer:'/assets/parts/hands/leaf.webp'},
 ]
 
