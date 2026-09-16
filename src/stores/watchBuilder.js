@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { defaultBuild, partCatalog } from '../data/watchParts'
-import { checkCompatibility, getCompatibleParts, getInvalidSelections } from '../utils/compatibility'
-import { serializeBuild } from '../utils/buildState'
-import { sanitizeBuild } from '../utils/shareBuild'
+import { defaultBuild, partCatalog } from '../data/watchParts.js'
+import { checkCompatibility, getCompatibleParts, getInvalidSelections } from '../utils/compatibility.js'
+import { serializeBuild } from '../utils/buildState.js'
+import { sanitizeBuild } from '../utils/shareBuild.js'
 
 const lookup = (type, id) => (partCatalog[type] || []).find((part) => part.id === id)
 const TYPES = ['movement', 'case', 'dial', 'hands', 'strap', 'caseback']
