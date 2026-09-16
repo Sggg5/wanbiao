@@ -57,7 +57,8 @@
   aspect-ratio: 1;
   top: 37%;
   left: 37.5%;
-  inset: auto;
+  right: auto;
+  bottom: auto;
   border-radius: 50%;
   background: var(--dial);
   mix-blend-mode: color;
