@@ -1,6 +1,6 @@
-import { BUILD_STATE_VERSION, deserializeBuild, serializeBuild } from './buildState'
-import { defaultBuild, partCatalog } from '../data/watchParts'
-import { getCompatibleParts, isCompatible } from './compatibility'
+import { BUILD_STATE_VERSION, deserializeBuild, serializeBuild } from './buildState.js'
+import { defaultBuild, partCatalog } from '../data/watchParts.js'
+import { getCompatibleParts, isCompatible } from './compatibility.js'
 
 const valid = (type, id) => Boolean(id && partCatalog[type]?.some((part) => part.id === id))
 
