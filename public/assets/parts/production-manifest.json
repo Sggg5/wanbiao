@@ -1,0 +1,14 @@
+{
+  "canvas": { "width": 1200, "height": 1600 },
+  "source": "/assets/atelier-watch-placeholder.png",
+  "required": [
+    "/assets/parts/cases/classic-39.webp",
+    "/assets/parts/dials/midnight-blue.webp",
+    "/assets/parts/dials/obsidian-black.webp",
+    "/assets/parts/dials/silver-grain.webp",
+    "/assets/parts/hands/dauphine.webp",
+    "/assets/parts/straps/steel-back.webp",
+    "/assets/parts/straps/steel-front.webp",
+    "/assets/parts/common/crystal-highlight.webp"
+  ]
+}
