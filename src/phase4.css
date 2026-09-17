@@ -2,7 +2,7 @@
 
 .source-derived-layer,
 .watch-layer img {
-  transition: opacity .28s cubic-bezier(.22, 1, .36, 1);
+  transition: opacity .32s cubic-bezier(.22, 1, .36, 1);
 }
 
 .watch-preview:not(.composite-active) .source-derived-layer,
@@ -26,17 +26,49 @@
   display: block;
 }
 
+.layer-swap-enter-active,
+.layer-swap-leave-active {
+  transition:
+    opacity .34s cubic-bezier(.22, 1, .36, 1),
+    transform .38s cubic-bezier(.22, 1, .36, 1);
+}
+
+.layer-swap-enter-from,
+.layer-swap-leave-to {
+  opacity: 0;
+}
+
+.layer-swap-enter-from.layer-dial {
+  transform: scale(.975);
+}
+
+.layer-swap-leave-to.layer-dial {
+  transform: scale(1.012);
+}
+
+.layer-swap-enter-from.layer-strap-back,
+.layer-swap-leave-to.layer-strap-back {
+  transform: translateY(-18px);
+}
+
+.layer-swap-enter-from.layer-strap-front,
+.layer-swap-leave-to.layer-strap-front {
+  transform: translateY(18px);
+}
+
 .watch-preview.composite-active .crystal-highlight {
-  opacity: .24;
+  opacity: .22;
 }
 
 .watch-preview.composite-active .watch-shadow {
-  opacity: .48;
+  opacity: .5;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .source-derived-layer,
-  .watch-layer img {
+  .watch-layer img,
+  .layer-swap-enter-active,
+  .layer-swap-leave-active {
     transition: none;
   }
 }
