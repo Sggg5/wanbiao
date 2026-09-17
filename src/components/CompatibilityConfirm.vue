@@ -7,12 +7,12 @@
     aria-labelledby="movement-confirm-title"
   >
     <div>
-      <p id="movement-confirm-title">CHANGE MOVEMENT?</p>
-      <span>This change will reset:</span>
-      <strong>{{ store.pendingMovement.invalid.join(' · ').toUpperCase() }}</strong>
+      <p id="movement-confirm-title">更换机芯？</p>
+      <span>此操作将重置：</span>
+      <strong>{{ formatInvalid(store.pendingMovement.invalid) }}</strong>
       <footer>
-        <button @click="store.cancelMovement">CANCEL</button>
-        <button @click="store.confirmMovement">CONTINUE</button>
+        <button @click="store.cancelMovement">取消</button>
+        <button @click="store.confirmMovement">继续</button>
       </footer>
     </div>
   </div>
@@ -21,4 +21,17 @@
 <script setup>
 import { useWatchBuilderStore } from '../stores/watchBuilder'
 const store = useWatchBuilderStore()
+
+const partLabels = {
+  movement: '机芯',
+  case: '表壳',
+  dial: '表盘',
+  hands: '指针',
+  strap: '表带',
+  caseback: '底盖',
+}
+
+function formatInvalid(parts) {
+  return parts.map((part) => partLabels[part] || part).join(' · ')
+}
 </script>
