@@ -9,7 +9,7 @@
     "dev": "vite --host 127.0.0.1 --port 5173",
     "validate:assets": "node scripts/validate-watch-assets.mjs",
     "validate:assets:strict": "node scripts/validate-watch-assets.mjs --strict-webp",
-    "prebuild": "npm run assets:generate && npm run validate:assets:strict",
+    "prebuild": "npm run validate:assets:strict",
     "build": "vite build",
     "test": "node --test",
     "preview": "vite preview --host 127.0.0.1 --port 4173"
