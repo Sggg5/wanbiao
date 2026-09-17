@@ -16,14 +16,14 @@
         :class="{ visible: drag.isOverInstallZone }"
         :style="style"
       >
-        <span v-if="drag.isOverInstallZone && zoneStyles.length === 1">PLACE TO INSTALL</span>
+        <span v-if="drag.isOverInstallZone && zoneStyles.length === 1">拖到此处安装</span>
       </div>
 
       <img
         class="watch-image fallback-watch"
         :class="{ 'composite-ready': compositeActivated }"
         src="/assets/atelier-watch-placeholder.png"
-        alt="Custom steel watch preview"
+        alt="定制腕表预览"
       />
 
       <WatchLayer
