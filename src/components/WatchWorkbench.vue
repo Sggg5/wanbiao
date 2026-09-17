@@ -3,16 +3,16 @@
     <div class="wood-grain" aria-hidden="true" />
 
     <header class="workbench-header" :inert="benchControlsLocked ? '' : undefined">
-      <a href="#" class="brand">ATELIER <i>TIME</i></a>
+      <a href="#" class="brand">腕表 <i>工坊</i></a>
       <div>
-        <button class="build-number" @click="buildSheet = true">BUILD / {{ store.buildNumber }}</button>
-        <button class="menu" aria-label="Enter focus mode" @click="focusMode = true">◎</button>
+        <button class="build-number" @click="buildSheet = true">方案 / {{ store.buildNumber }}</button>
+        <button class="menu" aria-label="进入专注模式" @click="focusMode = true">◎</button>
       </div>
     </header>
 
     <section class="bench-content">
       <MovementTray :drag="activeDrag" :inert="benchControlsLocked ? '' : undefined" />
-      <section class="leather-mat" aria-label="Watch assembly mat" @click="enterFocus">
+      <section class="leather-mat" aria-label="腕表装配垫" @click="enterFocus">
         <WatchPreview ref="preview" :drag="activeDrag" />
       </section>
       <PartsTray :drag="activeDrag" :inert="benchControlsLocked ? '' : undefined" />
@@ -46,7 +46,7 @@
     </div>
 
     <p v-if="notice" class="drag-notice" aria-live="polite">{{ notice }}</p>
-    <button v-if="focusMode" class="focus-return" @click="focusMode = false">RETURN TO BENCH</button>
+    <button v-if="focusMode" class="focus-return" @click="focusMode = false">返回工作台</button>
 
     <BuildSheet
       v-if="buildSheet"
@@ -102,14 +102,14 @@ function install(part) {
   const result = store.setSelection(part.type, part.id)
   if (result.status === 'installed') {
     store.goToStep(part.type)
-    announce(`${part.name.toUpperCase()} INSTALLED`)
+    announce(`已安装 ${part.name}`)
   } else if (result.status === 'incompatible') {
-    announce('NOT COMPATIBLE')
+    announce('零件不兼容')
   }
 }
 
 function invalidDrop(_part, reason) {
-  announce(reason === 'incompatible' ? 'NOT COMPATIBLE' : 'PLACE ON WATCH')
+  announce(reason === 'incompatible' ? '零件不兼容' : '请拖到腕表安装区域')
 }
 
 const drag = usePartDrag({
@@ -121,7 +121,7 @@ const drag = usePartDrag({
 const screenshotDrag = ref(false)
 const demoDrag = {
   isDragging: true,
-  dragPart: { id: 'midnight-blue', type: 'dial', name: 'MIDNIGHT BLUE', color: '#102b46' },
+  dragPart: { id: 'midnight-blue', type: 'dial', name: '午夜蓝', color: '#102b46' },
   ghostStyle: { transform: 'translate3d(1050px, 385px, 0)' },
   isOverInstallZone: true,
   consumeClick: () => false,
@@ -142,7 +142,7 @@ function finishBuild() {
 function resetBuild() {
   store.resetBuild()
   buildSheet.value = false
-  announce('BUILD RESET')
+  announce('方案已重置')
 }
 
 async function copyLink() {
@@ -150,9 +150,9 @@ async function copyLink() {
   history.replaceState(null, '', url)
   try {
     await navigator.clipboard.writeText(url)
-    announce('LINK COPIED')
+    announce('链接已复制')
   } catch {
-    announce('LINK READY')
+    announce('分享链接已生成')
   }
 }
 

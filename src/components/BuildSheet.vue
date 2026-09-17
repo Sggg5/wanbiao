@@ -1,8 +1,8 @@
 <template>
-  <aside class="build-sheet" role="dialog" aria-modal="true" aria-label="Build sheet">
-    <button class="sheet-close" @click="$emit('close')" aria-label="Close build sheet">×</button>
-    <p>ATELIER TIME / BUILD SHEET</p>
-    <h2>BUILD / {{ summary.buildNumber }}</h2>
+  <aside class="build-sheet" role="dialog" aria-modal="true" aria-label="配置清单">
+    <button class="sheet-close" @click="$emit('close')" aria-label="关闭配置清单">×</button>
+    <p>腕表工坊 / 配置清单</p>
+    <h2>方案 / {{ summary.buildNumber }}</h2>
     <dl>
       <template v-for="item in rows" :key="item.label">
         <dt>{{ item.label }}</dt>
@@ -11,13 +11,13 @@
     </dl>
     <div class="sheet-total">¥ {{ summary.total.toLocaleString() }}</div>
     <div class="sheet-actions">
-      <button @click="$emit('copy')">COPY LINK</button>
+      <button @click="$emit('copy')">复制链接</button>
       <template v-if="!confirming">
-        <button @click="confirming = true">RESET</button>
+        <button @click="confirming = true">重置</button>
       </template>
       <template v-else>
-        <button @click="confirming = false">CANCEL</button>
-        <button class="confirm-reset" @click="confirmReset">RESET BUILD</button>
+        <button @click="confirming = false">取消</button>
+        <button class="confirm-reset" @click="confirmReset">确认重置</button>
       </template>
     </div>
   </aside>
@@ -31,12 +31,12 @@ const emit = defineEmits(['close', 'copy', 'reset'])
 const confirming = ref(false)
 
 const rows = computed(() => [
-  ['MOVEMENT', props.summary.movement],
-  ['CASE', props.summary.case],
-  ['DIAL', props.summary.dial],
-  ['HANDS', props.summary.hands],
-  ['STRAP', props.summary.strap],
-  ['BACK', props.summary.caseback],
+  ['机芯', props.summary.movement],
+  ['表壳', props.summary.case],
+  ['表盘', props.summary.dial],
+  ['指针', props.summary.hands],
+  ['表带', props.summary.strap],
+  ['底盖', props.summary.caseback],
 ].map(([label, item]) => ({ label, value: item?.name || '—' })))
 
 function confirmReset() {
