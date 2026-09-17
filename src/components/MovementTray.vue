@@ -1,12 +1,12 @@
 <template>
-  <aside class="movement-tray" aria-label="Movement selection">
+  <aside class="movement-tray" aria-label="机芯选择">
     <button
       v-for="movement in movements"
       :key="movement.id"
       class="movement"
       :class="{ selected: movement.id === store.selectedMovement, dragging: drag?.dragPart?.id === movement.id }"
       :aria-pressed="movement.id === store.selectedMovement"
-      :aria-label="`${movement.name}, ${movement.frequency}`"
+      :aria-label="`${movement.name}，${movement.frequency}`"
       @pointerdown="drag?.begin($event, movement)"
       @click="selectMovement(movement)"
     >
