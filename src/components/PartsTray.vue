@@ -1,5 +1,5 @@
 <template>
-  <aside v-if="store.activeStep !== 'movement'" class="parts-tray" :class="`parts-${store.activeStep}`" aria-label="Parts selection">
+  <aside v-if="store.activeStep !== 'movement'" class="parts-tray" :class="`parts-${store.activeStep}`" aria-label="零件选择">
     <Transition name="parts-change" mode="out-in">
       <div :key="store.activeStep" class="parts-stack">
         <button
@@ -27,7 +27,7 @@
           </span>
           <span class="part-meta">
             <b>{{ part.name }}</b>
-            <small>{{ part.sku || part.frequency || part.model }} · {{ part.price ? `+ ¥${part.price}` : 'STANDARD' }}</small>
+            <small>{{ part.sku || part.frequency || part.model }} · {{ part.price ? `+ ¥${part.price}` : '标配' }}</small>
             <em v-if="!compatible(part)">{{ incompatibilityLabel(part) }}</em>
           </span>
         </button>
@@ -52,18 +52,18 @@ const compatible = (part) => compatibility(part).compatible
 function incompatibilityLabel(part) {
   const reason = compatibility(part).reasons[0]
   const labels = {
-    MOVEMENT_MISMATCH: 'MOVEMENT MISMATCH',
-    DIAL_DIAMETER_MISMATCH: 'DIAL SIZE MISMATCH',
-    HAND_SIZE_MISMATCH: 'HAND SIZE MISMATCH',
-    LUG_WIDTH_MISMATCH: 'LUG WIDTH MISMATCH',
-    CASEBACK_CASE_MISMATCH: 'CASE MISMATCH',
+    MOVEMENT_MISMATCH: '机芯不兼容',
+    DIAL_DIAMETER_MISMATCH: '表盘尺寸不兼容',
+    HAND_SIZE_MISMATCH: '指针尺寸不兼容',
+    LUG_WIDTH_MISMATCH: '表耳宽度不兼容',
+    CASEBACK_CASE_MISMATCH: '表壳不兼容',
   }
-  return labels[reason] || 'NOT COMPATIBLE'
+  return labels[reason] || '不兼容'
 }
 
 function partLabel(part) {
-  const state = compatible(part) ? (selectedId.value === part.id ? 'selected' : 'available') : incompatibilityLabel(part)
-  return `${part.name}, ${state}`
+  const state = compatible(part) ? (selectedId.value === part.id ? '已选择' : '可选择') : incompatibilityLabel(part)
+  return `${part.name}，${state}`
 }
 
 function select(part) {
