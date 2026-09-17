@@ -24,7 +24,7 @@ export const hands = [
 
 export const straps = [
   {id:'strap-steel',type:'strap',name:'精钢表链',sku:'S-001',price:590,lugWidths:[20,22],compatibleMovements:['miyota-9015','seiko-nh35','sellita-sw200'],backLayer:'/assets/parts/straps/steel-back.webp',frontLayer:'/assets/parts/straps/steel-front.webp',assetKey:'straps/steel',material:'steel'},
-  {id:'strap-black-leather',type:'strap',name:'黑色皮带',sku:'S-002',price:260,lugWidths:[20],compatibleMovements:['miyota-9015','sellita-sw200'],backLayer:null,frontLayer:null,assetKey:'straps/black-leather',material:'black-leather'},
+  {id:'strap-black-leather',type:'strap',name:'黑色皮带',sku:'S-002',price:260,lugWidths:[20],compatibleMovements:['miyota-9015','sellita-sw200'],backLayer:'/assets/parts/straps/black-leather-back.webp',frontLayer:'/assets/parts/straps/black-leather-front.webp',assetKey:'straps/black-leather',material:'black-leather'},
   {id:'strap-brown-leather',type:'strap',name:'棕色皮带',sku:'S-003',price:240,lugWidths:[20,22],compatibleMovements:['seiko-nh35','sellita-sw200'],backLayer:null,frontLayer:null,assetKey:'straps/brown-leather',material:'brown-leather'},
 ]
 
