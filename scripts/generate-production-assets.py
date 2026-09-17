@@ -43,6 +43,9 @@ def masked_source(kind):
         d.rectangle((280, 260, 920, 520), fill=255)
         d.rectangle((270, 910, 930, 1140), fill=255)
         d.rounded_rectangle((885, 620, 1035, 840), radius=35, fill=255)
+        # Open only the central top end-link slot. The side shoulders/lugs stay intact,
+        # while the strap-back layer can meet the case naturally without a fake overlay patch.
+        d.rectangle((500, 245, 700, 330), fill=0)
         d.ellipse((CX - 318, CY - 318, CX + 318, CY + 318), fill=0)
         mask = mask.filter(ImageFilter.GaussianBlur(1.0))
     else:
@@ -161,20 +164,16 @@ def leather_strap(section):
     mask = Image.new('L', CANVAS, 0)
     d = ImageDraw.Draw(mask)
 
-    top_connector = None
     if section == 'back':
         shape = [(505, 0), (695, 0), (714, 330), (695, 430), (505, 430), (486, 330)]
         y0, y1 = 0, 430
     elif section == 'front':
         shape = [(503, 1020), (697, 1020), (722, 1600), (478, 1600)]
-        top_connector = [(502, 255), (698, 255), (705, 338), (495, 338)]
         y0, y1 = 1020, 1600
     else:
         raise ValueError(section)
 
     d.polygon(shape, fill=255)
-    if top_connector:
-        d.polygon(top_connector, fill=255)
     mask = mask.filter(ImageFilter.GaussianBlur(.65))
 
     leather = Image.new('RGBA', CANVAS, (20, 18, 17, 255))
@@ -207,9 +206,6 @@ def leather_strap(section):
         d.line((rx, y, rx, y + 10), fill=(166, 153, 132, 155), width=3)
 
     d.line(shape + [shape[0]], fill=(3, 3, 3, 230), width=5, joint='curve')
-    if top_connector:
-        d.line(top_connector + [top_connector[0]], fill=(3, 3, 3, 225), width=4, joint='curve')
-        d.line((515, 326, 685, 326), fill=(104, 96, 86, 75), width=2)
 
     if section == 'back':
         d.line(((510, 10), (501, 325), (516, 414)), fill=(92, 86, 79, 82), width=2)
