@@ -35,6 +35,8 @@ const manifest = {
     '/assets/parts/hands/dauphine.webp',
     '/assets/parts/straps/steel-back.webp',
     '/assets/parts/straps/steel-front.webp',
+    '/assets/parts/straps/black-leather-back.webp',
+    '/assets/parts/straps/black-leather-front.webp',
     '/assets/parts/common/crystal-highlight.webp',
   ],
 }
