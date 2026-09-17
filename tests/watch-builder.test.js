@@ -33,6 +33,14 @@ test('all three phase4 dial samples can be paired with Miyota 9015', () => {
   }
 })
 
+test('black leather strap has a complete layered representation and fits Classic 39', () => {
+  const strap = partCatalog.strap.find((part) => part.id === 'strap-black-leather')
+  assert.ok(strap.backLayer)
+  assert.ok(strap.frontLayer)
+  const result = checkCompatibility(strap, defaultBuild)
+  assert.equal(result.compatible, true)
+})
+
 test('NH35 configuration can be repaired to a valid build while preserving compatible choices', () => {
   const repaired = sanitizeBuild({
     movement: 'seiko-nh35',
